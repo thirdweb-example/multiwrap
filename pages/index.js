@@ -1,6 +1,7 @@
 import { useAddress, useDisconnect, useMetamask, useMultiwrap } from '@thirdweb-dev/react';
 import { CustomContract } from '../components/CustomContract';
 import { useState } from 'react';
+import {BigNumber, ethers} from "ethers";
 
 const multiwrapAddress = "0xc84A8236e5dE1F1DD67aa6156A93155A9B0B4f6a";
 
@@ -39,13 +40,18 @@ export default function Home() {
     };
 
     try {
-      if (erc20.contract) {
-        await erc20.contract.call("approve", multiwrapAddress, erc20.quantity);
+      if (erc20.contract !== null ) {
+        //@TODO Get contract decimals dynamically
+        const balance = await erc20.contract.call("balanceOf", address);
+        console.log(ethers.utils.parseUnits(erc20.quantity, 18));
+        const perm = await erc20.contract.call("approve", multiwrapAddress, ethers.utils.parseUnits(erc20.quantity, 18));
+        console.log("Permission Request", perm);
       }
-      if (erc1155.contract) {
+      if (erc1155.contract !== null) {
         await erc1155.contract.call("approve", multiwrapAddress, erc1155.tokenId);
       }
-      if (erc721.contract) {
+      if (erc721.contract !== null) {
+        console.log("It's trying stupid")
         await erc721.contract.call("approve", multiwrapAddress, erc721.tokenId);
       }
 
