@@ -36,7 +36,6 @@ Multiwrap lets you wrap any number of ERC20, ERC721 and ERC1155 tokens you own i
 The single wrapped token received on bundling up multiple assets, as mentioned above, is an ERC721 NFT. It can be transferred, sold on any NFT Marketplace, and generate royalties just like any other NFTs.
 
 
-**Check out the Demo here**: https://multiwrap-demo.vercel.app/
 ## Tools:
 - [**thirdweb Multiwrap**](https://portal.thirdweb.com/typescript/sdk.multiwrap)
 
