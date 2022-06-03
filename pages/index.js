@@ -37,9 +37,9 @@ export default function Home() {
     e.preventDefault();
     // If there is a value for each erc721, erc1155, and erc20, include them in array
     const tokensToWrap = {
-      erc20Tokens: erc20.address ? [erc20] : [],
-      erc721Tokens: erc721.address ? [erc721]: [],
-      erc1155Tokens: erc1155.address? [erc1155]: [],
+      erc20Tokens: erc20.contractAddress ? [erc20] : [],
+      erc721Tokens: erc721.contractAddress ? [erc721]: [],
+      erc1155Tokens: erc1155.contractAddress? [erc1155]: [],
     };
 
     try {
@@ -47,19 +47,19 @@ export default function Home() {
       const approvalCalls = [];
 
       // 1. ERC 20 tokens
-      if (erc20.address) {
-        const erc20Contract = sdk.getToken(erc20.address);
+      if (erc20.contractAddress) {
+        const erc20Contract = sdk.getToken(erc20.contractAddress);
         approvalCalls.push(erc20Contract.setAllowance(multiwrapAddress, erc20.quantity));
       }
       // 2. ERC1155 tokens
-      if (erc1155.address) {
-        const erc1155Contract = sdk.getEdition(erc1155.address);
+      if (erc1155.contractAddress) {
+        const erc1155Contract = sdk.getEdition(erc1155.contractAddress);
         approvalCalls.push(erc1155Contract.setApprovalForAll(multiwrapAddress, true));
       }
 
       // 3. ERC721 tokens
-      if (erc721.address) {
-        const erc721Contract = sdk.getNFTCollection(erc721.address);
+      if (erc721.contractAddress) {
+        const erc721Contract = sdk.getNFTCollection(erc721.contractAddress);
         approvalCalls.push(erc721Contract.setApprovalForToken(multiwrapAddress, erc721.tokenId));
       }
 
