@@ -8,7 +8,7 @@ import {
 } from "@thirdweb-dev/react";
 import { useState } from "react";
 
-const multiwrapAddress = "0xc84A8236e5dE1F1DD67aa6156A93155A9B0B4f6a";
+const multiwrapAddress = "0x6242B389424e9d100Bc67A9322a824d91B7c1c26";
 
 export default function Home() {
   const address = useAddress();
@@ -65,11 +65,14 @@ export default function Home() {
 
       // Execute all of the approvals
       await Promise.all(approvalCalls);
-
+      console.log("Approvals complete");
+      
       // Now we have the approval, we can wrap them all together
+      console.log("Wrapping token");
       await multiwrap.wrap(tokensToWrap, {
         name: "My Wrapped Token",
       });
+      console.log("Wrapping complete");
 
       alert("Successfully wrapped!");
     } catch (error) {
