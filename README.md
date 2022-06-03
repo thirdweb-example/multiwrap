@@ -54,7 +54,7 @@ npm install
 yarn install
 ```
 
-# Guide
+
 
 ### Getting the Multiwrap contract
 
@@ -62,7 +62,7 @@ yarn install
 const multiwrap = useMultiwrap(multiwrapAddress);
 ```
 
-### Give permission to your multiwrap contract to move your assets
+### Giving permission to your multiwrap contract to move your tokens
 ```js
 // Get the contracts
 const erc20Contract = sdk.getToken(erc20TokenAddress);
