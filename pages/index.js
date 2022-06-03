@@ -47,7 +47,7 @@ export default function Home() {
       const approvalCalls = [];
 
       // 1. ERC 20 tokens
-      if (erc20.contractAddress) {
+      if (erc20.contractAddress && erc20.quantity) {
         const erc20Contract = sdk.getToken(erc20.contractAddress);
         approvalCalls.push(erc20Contract.setAllowance(multiwrapAddress, erc20.quantity));
       }
@@ -58,7 +58,7 @@ export default function Home() {
       }
 
       // 3. ERC721 tokens
-      if (erc721.contractAddress) {
+      if (erc721.contractAddress && erc721.tokenId) {
         const erc721Contract = sdk.getNFTCollection(erc721.contractAddress);
         approvalCalls.push(erc721Contract.setApprovalForToken(multiwrapAddress, erc721.tokenId));
       }
