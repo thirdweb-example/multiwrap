@@ -8,7 +8,7 @@ import {
 } from "@thirdweb-dev/react";
 import { useState, useEffect } from "react";
 
-const multiwrapAddress = "0x6242B389424e9d100Bc67A9322a824d91B7c1c26";
+const multiwrapAddress = "0x0638C4f2FB4C9f85219BDAd85fE0297095F9a4D8";
 
 export default function Home() {
   const address = useAddress();
