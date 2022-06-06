@@ -6,7 +6,7 @@ import {
   useNFTs,
   useSDK,
 } from "@thirdweb-dev/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const multiwrapAddress = "0x6242B389424e9d100Bc67A9322a824d91B7c1c26";
 
@@ -16,7 +16,7 @@ export default function Home() {
   const disconnectWallet = useDisconnect();
   const multiwrap = useMultiwrap(multiwrapAddress);
   const sdk = useSDK();
-  const nfts = useNFTs(multiwrap)
+  const nfts = useNFTs(multiwrap);
 
   // Store the state of each input fields
   const [erc721, setErc721] = useState({
@@ -38,8 +38,8 @@ export default function Home() {
     // If there is a value for each erc721, erc1155, and erc20, include them in array
     const tokensToWrap = {
       erc20Tokens: erc20.contractAddress ? [erc20] : [],
-      erc721Tokens: erc721.contractAddress ? [erc721]: [],
-      erc1155Tokens: erc1155.contractAddress? [erc1155]: [],
+      erc721Tokens: erc721.contractAddress ? [erc721] : [],
+      erc1155Tokens: erc1155.contractAddress ? [erc1155] : [],
     };
 
     try {
@@ -49,24 +49,30 @@ export default function Home() {
       // 1. ERC 20 tokens
       if (erc20.contractAddress && erc20.quantity) {
         const erc20Contract = sdk.getToken(erc20.contractAddress);
-        approvalCalls.push(erc20Contract.setAllowance(multiwrapAddress, erc20.quantity));
+        approvalCalls.push(
+          erc20Contract.setAllowance(multiwrapAddress, erc20.quantity)
+        );
       }
       // 2. ERC1155 tokens
       if (erc1155.contractAddress) {
         const erc1155Contract = sdk.getEdition(erc1155.contractAddress);
-        approvalCalls.push(erc1155Contract.setApprovalForAll(multiwrapAddress, true));
+        approvalCalls.push(
+          erc1155Contract.setApprovalForAll(multiwrapAddress, true)
+        );
       }
 
       // 3. ERC721 tokens
       if (erc721.contractAddress && erc721.tokenId) {
         const erc721Contract = sdk.getNFTCollection(erc721.contractAddress);
-        approvalCalls.push(erc721Contract.setApprovalForToken(multiwrapAddress, erc721.tokenId));
+        approvalCalls.push(
+          erc721Contract.setApprovalForToken(multiwrapAddress, erc721.tokenId)
+        );
       }
 
       // Execute all of the approvals
       await Promise.all(approvalCalls);
       console.log("Approvals complete");
-      
+
       // Now we have the approval, we can wrap them all together
       console.log("Wrapping token");
       await multiwrap.wrap(tokensToWrap, {
@@ -88,13 +94,19 @@ export default function Home() {
     <div>
       <button onClick={disconnectWallet}>Disconnect Wallet</button>
       <p>Your address: {address}</p>
+      <hr />
+      <h3>
+        Enter the contract addresses (Rinkeby only) and token ids to wrap:
+      </h3>
 
       <form>
         <div>
           <input
             type="text"
             placeholder="ERC721 contract address"
-            onChange={(e) => setErc721({ ...erc721, contractAddress: e.target.value })}
+            onChange={(e) =>
+              setErc721({ ...erc721, contractAddress: e.target.value })
+            }
           />
           <input
             type="text"
@@ -102,7 +114,6 @@ export default function Home() {
             onChange={(e) => setErc721({ ...erc721, tokenId: e.target.value })}
           />
         </div>
-
         <div>
           <input
             type="text"
@@ -126,12 +137,13 @@ export default function Home() {
             }
           />
         </div>
-
         <div>
           <input
             type="text"
             placeholder="ERC20 contract address"
-            onChange={(e) => setErc20({ ...erc20, contractAddress: e.target.value })}
+            onChange={(e) =>
+              setErc20({ ...erc20, contractAddress: e.target.value })
+            }
           />
           <input
             type="text"
@@ -139,15 +151,47 @@ export default function Home() {
             onChange={(e) => setErc20({ ...erc20, quantity: e.target.value })}
           />
         </div>
-
         <button type="submit" onClick={wrap}>
           Wrap
         </button>
-
         <hr />
-
-        {(nfts.data || []).map(nft => nft.metadata.name)}
+        <h3>Multiwrap contract info:</h3>
+        <p>{multiwrap.getAddress()} (Rinkeby)</p>
+        {(nfts.data || []).map((nft) => (
+          <WrappedNFT key={nft.metadata.id} multiwrap={multiwrap} nft={nft} />
+        ))}
       </form>
+    </div>
+  );
+}
+
+function WrappedNFT({ multiwrap, nft }) {
+  const [wrappedContents, setContents] = useState();
+  useEffect(() => {
+    const fetchContents = async () => {
+      return await multiwrap.getWrappedContents(0);
+    };
+    fetchContents()
+      .then((contents) => setContents(contents))
+      .catch((error) => console.log(error));
+  }, [multiwrap, nft]);
+
+  if (!nft || !wrappedContents) {
+    return null;
+  }
+
+  return (
+    <div>
+      <h4>
+        #{nft.metadata.id.toString()} - {nft.metadata.name}
+      </h4>
+      <p>
+        wrapped ERC20s: {wrappedContents.erc20Tokens.length}
+        <br />
+        wrapped ERC721s: {wrappedContents.erc721Tokens.length}
+        <br />
+        wrapped ERC1166s: {wrappedContents.erc1155Tokens.length}
+      </p>
     </div>
   );
 }
