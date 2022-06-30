@@ -42,14 +42,10 @@ The single wrapped token received on bundling up multiple assets, as mentioned a
 
 ## Using This Repo
 
-- Create a Multiwrap contract via the thirdweb dashboard on the Ethereum Rinkeby (RINKEBY) test network.
-
-- Clone this repository.
+Create a clone of this repository using our CLI:
 
 ```bash
-npm install
-# or
-yarn install
+npx thirdweb create --example multiwrap-demo
 ```
 
 ### Getting the Multiwrap contract
