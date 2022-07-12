@@ -123,7 +123,7 @@ await multiwrapContract.unwrap(wrappedTokenId);
 
 ## Get wrapped Contents
 
-Get the contents of a wrapped token bundle. Will return a similar strucutre than the one passed in to the `wrap()` call.
+Get the contents of a wrapped token bundle. Will return a similar structure than the one passed in to the `wrap()` call.
 
 ```jsx
 const contents = await multiwrapContract.getWrappedContents(wrappedTokenId);
