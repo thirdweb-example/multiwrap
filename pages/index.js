@@ -24,9 +24,7 @@ export default function Home() {
     quantity: "",
   });
 
-  const wrap = async (e) => {
-    e.preventDefault();
-
+  const wrap = async () => {
     // If there is a value for each erc721, erc1155, and erc20, include them in array
     const tokensToWrap = {
       erc20Tokens: erc20.contractAddress ? [erc20] : [],
@@ -91,70 +89,64 @@ export default function Home() {
     <div>
       <h3>Enter the contract addresses (Goerli only) and token ids to wrap:</h3>
 
-      <form>
-        <div>
-          <input
-            type="text"
-            placeholder="ERC721 contract address"
-            onChange={(e) =>
-              setErc721({ ...erc721, contractAddress: e.target.value })
-            }
-          />
-          <input
-            type="text"
-            placeholder="ERC721 token ID"
-            onChange={(e) => setErc721({ ...erc721, tokenId: e.target.value })}
-          />
-        </div>
-        <div>
-          <input
-            type="text"
-            placeholder="ERC1155 contract address"
-            onChange={(e) =>
-              setErc1155({ ...erc1155, contractAddress: e.target.value })
-            }
-          />
-          <input
-            type="text"
-            placeholder="ERC1155 token ID"
-            onChange={(e) =>
-              setErc1155({ ...erc1155, tokenId: e.target.value })
-            }
-          />
-          <input
-            type="text"
-            placeholder="ERC1155 quantity"
-            onChange={(e) =>
-              setErc1155({ ...erc1155, quantity: e.target.value })
-            }
-          />
-        </div>
-        <div>
-          <input
-            type="text"
-            placeholder="ERC20 contract address"
-            onChange={(e) =>
-              setErc20({ ...erc20, contractAddress: e.target.value })
-            }
-          />
-          <input
-            type="text"
-            placeholder="ERC20 quantity"
-            onChange={(e) => setErc20({ ...erc20, quantity: e.target.value })}
-          />
-        </div>
-        <div style={{ width: 240, padding: 8 }}>
-          <Web3Button contractAddress={multiwrapAddress} action={wrap}>
-            Wrap
-          </Web3Button>
-        </div>
-        <hr />
-        <h3>Multiwrap contract info:</h3>
-        <p>{multiwrap?.getAddress()} (Goerli)</p>
-        {(nfts.data || []).map((nft) => (
-          <WrappedNFT key={nft.metadata.id} multiwrap={multiwrap} nft={nft} />
-        ))}
-      </form>
+      <div>
+        <input
+          type="text"
+          placeholder="ERC721 contract address"
+          onChange={(e) =>
+            setErc721({ ...erc721, contractAddress: e.target.value })
+          }
+        />
+        <input
+          type="text"
+          placeholder="ERC721 token ID"
+          onChange={(e) => setErc721({ ...erc721, tokenId: e.target.value })}
+        />
+      </div>
+      <div>
+        <input
+          type="text"
+          placeholder="ERC1155 contract address"
+          onChange={(e) =>
+            setErc1155({ ...erc1155, contractAddress: e.target.value })
+          }
+        />
+        <input
+          type="text"
+          placeholder="ERC1155 token ID"
+          onChange={(e) => setErc1155({ ...erc1155, tokenId: e.target.value })}
+        />
+        <input
+          type="text"
+          placeholder="ERC1155 quantity"
+          onChange={(e) => setErc1155({ ...erc1155, quantity: e.target.value })}
+        />
+      </div>
+      <div>
+        <input
+          type="text"
+          placeholder="ERC20 contract address"
+          onChange={(e) =>
+            setErc20({ ...erc20, contractAddress: e.target.value })
+          }
+        />
+        <input
+          type="text"
+          placeholder="ERC20 quantity"
+          onChange={(e) => setErc20({ ...erc20, quantity: e.target.value })}
+        />
+      </div>
+      <div style={{ width: 240, padding: 8 }}>
+        <Web3Button contractAddress={multiwrapAddress} action={wrap}>
+          Wrap
+        </Web3Button>
+      </div>
+      <hr />
+      <h3>Multiwrap contract info:</h3>
+      <p>{multiwrap?.getAddress()} (Goerli)</p>
+      {(nfts.data || []).map((nft) => (
+        <WrappedNFT key={nft.metadata.id} multiwrap={multiwrap} nft={nft} />
+      ))}
     </div>
   );
 }
@@ -184,7 +176,7 @@ function WrappedNFT({ multiwrap, nft }) {
         <br />
         wrapped ERC721s: {wrappedContents.erc721Tokens.length}
         <br />
-        wrapped ERC1166s: {wrappedContents.erc1155Tokens.length}
+        wrapped ERC1155s: {wrappedContents.erc1155Tokens.length}
       </p>
     </div>
   );
